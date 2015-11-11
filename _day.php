@@ -5,7 +5,6 @@
   	include("./adm/class.db.php");
 	include("./adm/class.classinstructor.php");
 	include("./adm/class.traininghour.php");
-	include("./adm/class.utilities.php");
 
 	if (!empty($_GET)){
 		if(isset($_GET["day"]))
@@ -34,11 +33,13 @@
     $th = new traininghour();
     $jsonth = $th->getDay($db,$day);
     $classes = json_decode($jsonth, TRUE);
+    
+    $util = new utils();
 
 ?>
 <head lang="it">
     <meta http-equiv="Content-Type" content="text/html" />
-    <title>AIKIKAI MILANO: ORARIO</title>
+    <title>orario</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon-precomposed" href="assets/favicon_t.png" />
     <link rel="shortcut icon" href="assets/favicon.png">
@@ -56,8 +57,8 @@
 		</div><!-- sidebar -->
 		<div class="site_container">
 	        <div class="schedule-page">
-    	    	<div class="schedule__title"><span class="nomobile"><span class="fleft"><a href="./_day.php?day=<?php echo $prevday; ?>"><i class="fa fa-angle-double-left"></i></a></span><?php echo longDate($day); ?><span class="fright"><a href="./_day.php?day=<?php echo $nextday; ?>"><i class="fa fa-angle-double-right"></i></a></span></span>
-    	    	<span class="mobile"><span class="fleft"><a href="./_day.php?day=<?php echo $prevday; ?><?php if($wname) echo "&n"; ?>"><i class="fa fa-angle-double-left"></i></a></span><?php echo shortDate($day); ?><span class="fright"><a href="./_day.php?day=<?php echo $nextday; ?><?php if($wname) echo "&n"; ?>"><i class="fa fa-angle-double-right"></i></a></span></span></div>
+    	    	<div class="schedule__title"><span class="nomobile"><span class="fleft"><a href="./_day.php?day=<?php echo $prevday; ?>"><i class="fa fa-angle-double-left"></i></a></span><?php echo $util->longDate($day); ?><span class="fright"><a href="./_day.php?day=<?php echo $nextday; ?>"><i class="fa fa-angle-double-right"></i></a></span></span>
+    	    	<span class="mobile"><span class="fleft"><a href="./_day.php?day=<?php echo $prevday; ?><?php if($wname) echo "&n"; ?>"><i class="fa fa-angle-double-left"></i></a></span><?php echo $util->shortDate($day); ?><span class="fright"><a href="./_day.php?day=<?php echo $nextday; ?><?php if($wname) echo "&n"; ?>"><i class="fa fa-angle-double-right"></i></a></span></span></div>
 	              <div class="schedule">
                     <?php
                     	$tags = array();
@@ -84,7 +85,7 @@
 	                    	  	if($classes[$iter]['endtime'] != $classes[$iter+1]['starttime'])
 	                    	  		echo "<div class='class__spacer'>&nbsp;</div>";
 	                    	  	if($classes[$iter]['tag'] != "allenamento libero")
-		                    	  	if(!existsInArray($tags,$classes[$iter]['tag']))
+		                    	  	if(!$util->existsInArray($tags,$classes[$iter]['tag']))
 			                    	  	array_push($tags, $classes[$iter]['tag']);
 	                    	}
                     	  	echo "<div class='traininghour'>";
@@ -104,7 +105,7 @@
                     	  	echo "<br/>&nbsp;</div>";
                     	  	echo "</div>";
                     	  	if($classes[$iter]['tag'] != "allenamento libero")
-	                    	  	if(!existsInArray($tags,$classes[$iter]['tag']))
+	                    	  	if(!$util->existsInArray($tags,$classes[$iter]['tag']))
 		                    	  	array_push($tags, $classes[$iter]['tag']);
 
 		                   	if($wname){
@@ -122,6 +123,7 @@
     	          </div>
 			    </div><!-- schedule-page -->
 			<div class='note calnote'>Quella indicata &egrave; la pianificazione abituale,<span class="mobile"><br/></span><span class="nomobile"> </span>per eventuali variazioni consultare le ultime <a href="./_news.php">notizie</a>.</div>
+			<div class='note calnote'><span class="mobile"><br/></span></div>
   		</div> <!--  site_container -->
   	</div> <!--  site_wrapper -->
 <script type="text/javascript">

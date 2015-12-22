@@ -67,7 +67,13 @@
 				<li onclick="location.href=&apos;./_info.php&apos;" style="cursor: pointer" class="sidebar__link_item"><div class="sidebar__link_item__name"><span class="mobile"><i class="fa fa-info-circle fa-reverse fa-fw"></i></span>&nbsp;&nbsp;Info</div></li>
 				<div class="nomobile fright">
 				<li onclick="location.href=&apos;http://www.facebook.com/aikikaimilano/&apos;" style="cursor: pointer" class="sidebar__link_item fright nomobile"><div class="sidebar__link_item__name"><i alt='facebook' title="seguici su facebook" class="fa fa fa-facebook-official"></i></div></li>
-				<li onclick="location.href=&apos;./_news.php&apos;" style="cursor: pointer" class="nomobile sidebar__link_item fright"><div class="sidebar__link_item__name"><i alt='news' title="news" class="fa fa-quote-right"></i></div></li>
+				<li onclick="location.href=&apos;./_news.php&apos;" style="cursor: pointer" class="nomobile sidebar__link_item fright">
+<!--				<div id="noti_Container">
+					<div class="sidebar__link_item__name"><i alt='news' title="news" class="fa fa-quote-right"></i></div>
+					<div class="noti_bubble">1</div>
+				</div>-->
+				<div class="sidebar__link_item__name"><i alt='news' title="news" class="fa fa-quote-right"></i></div>
+				</li>
 				<li onclick="location.href=&apos;./_links.php&apos;" style="cursor: pointer" class="sidebar__link_item fright"><div class="sidebar__link_item__name"><i alt='links' title="links" class="fa fa-link"></i></div></li>
 				</div>
 			</ul>

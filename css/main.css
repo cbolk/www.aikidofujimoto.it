@@ -257,6 +257,27 @@ div.tagbox{width: 100px;height: 40px;border: 1px solid #000;margin: 5px; display
 }
 .piecenews p {margin-top: 0; margin-bottom: 0}
 
+/* notification news */
+#noti_Container {
+    position:relative;     /* This is crucial for the absolutely positioned element */
+}
+.noti_bubble {
+    position:absolute;    /* This breaks the div from the normal HTML document. */
+    top: -14px;
+    right:-12px;
+    padding:0px 8px 0px 8px;
+    background-color:red; /* you could use a background image if you'd like as well */
+    color:white;
+    font-weight:bold;
+    font-size:0.55em;
+
+    /* The following is CSS3, but isn't crucial for this technique to work. */
+    /* Keep in mind that if a browser doesn't support CSS3, it's fine! They just won't have rounded borders and won't have a box shadow effect. */
+    /* You can always use a background image to produce the same effect if you want to, and you can use both together so browsers without CSS3 still have the rounded/shadow look. */
+    border-radius:30px;
+    box-shadow:1px 1px 1px gray;
+}
+
 /* mix */
 ul.bullet {
     list-style-type: none;
@@ -317,6 +338,7 @@ h1, h2, h3, h4 {margin-bottom: 0px;}
 .acenter{text-align: center}
 .noborder {border: 0px;}
 a.noborder  {border-bottom: 0px;text-decoration: none}
+.red {color: red;}
 
 @media (min-width:769px){.mobile{display:none}}
 @media (max-width:960px){.nomobile{display:none}}

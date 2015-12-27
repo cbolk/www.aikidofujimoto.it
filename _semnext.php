@@ -1,28 +1,28 @@
 <?php
-	setlocale(LC_TIME, 'ita');
-	date_default_timezone_set('Europe/Rome');
-  	include("./adm/class.utilities.php");
-  	include("./adm/class.db.php");
-	include("./adm/class.seminar.php");
+  date_default_timezone_set('Europe/Rome');
+  setlocale(LC_TIME, 'ita');
+  include("./admin/basic.php");
+  include("./admin/class.db.php");
+  include("./adm/class.seminar.php");
+  include("./adm/class.utilities.php");
+  include("./utils/util.php");
 
-  	$db = new dbaccess();
-	$db->dbconnect();
-  	$util = new utils();
-
-	  $seminar = new seminar();
-	  $semID = $seminar->getNextStageID($db);
-	  $seminario = $seminar->get($db,$semID);
-	  $from = $util->medDate($seminario->fromdate);
-	  $fromMob = $util->medDate($seminario->fromdate);
-	  $to = $util->medDate($seminario->todate);
-	  $toMob = $util->medDate($seminario->todate);
-	  $istruttori = $seminar->getStageInstructors($db,$semID);
+  $db = new dbaccess();
+  $db->dbconnect();
+  $seminar = new seminar();
+  $semID = $seminar->getNextStageID($db);
+  $seminario = $seminar->get($db,$semID);
+  $from = medDate($seminario->fromdate);
+  $fromMob = medDate($seminario->fromdate);
+  $to = medDate($seminario->todate);
+  $toMob = medDate($seminario->todate);
+  $istruttori = $seminar->getStageInstructors($db,$semID);
 ?>
 <!DOCTYPE html>
     <head>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,700,700italic,400italic' rel='stylesheet' type='text/css'>
         <meta http-equiv="Content-Type" content="text/html" />
-        <title>prossimo seminario</title>
+        <title>AIKIKAI MILANO: PROSSIMO SEMINARIO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon-precomposed" href="assets/favicon_t.png" />
         <link rel="shortcut icon" href="assets/favicon.png">
@@ -42,7 +42,18 @@
     <div class="site_container">
     <div class="github-fork-ribbon-wrapper right">
         <div class="github-fork-ribbon">
+          <?php
+            $today = date("Y-m-d");
+            if($seminario->fromdate <= $today){
+              ?>
+            <a href="#">on air</a>
+          <?php
+            } else {
+          ?>
             <a href="#">coming soon</a>
+            <?php
+            }
+            ?>
         </div>
     </div>
         <div class="post_container">

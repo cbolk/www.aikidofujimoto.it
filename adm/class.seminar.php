@@ -154,7 +154,7 @@
 	/* returns the data of the next seminar to be held*/
 	function getNextStage($dbconn)
 	{
-		$query = "SELECT s.*, st.description as semtype, l.name as locname, l.address as locaddress, l.city as loccity, l.shortcity as locshortcity, l.placeID as locplaceID, o.name as orgname, o.phone as orgphone, o.email as orgmail, o.website as orgurl, o.openinghours as orghours FROM seminar s LEFT JOIN seminartype st ON s.typefk=st.id LEFT JOIN location l ON s.locationfk = l.id LEFT JOIN location o ON s.organizerfk = o.id WHERE s.startdate >= DATE(NOW()) order by s.startdate asc LIMIT 1;";
+		$query = "SELECT s.*, st.description as semtype, l.name as locname, l.address as locaddress, l.city as loccity, l.shortcity as locshortcity, l.placeID as locplaceID, o.name as orgname, o.phone as orgphone, o.email as orgmail, o.website as orgurl, o.openinghours as orghours FROM seminar s LEFT JOIN seminartype st ON s.typefk=st.id LEFT JOIN location l ON s.locationfk = l.id LEFT JOIN location o ON s.organizerfk = o.id WHERE  s.enddate >= DATE(NOW()) order by s.startdate asc LIMIT 1;";
 		$dbconn->dbconnect();
 		$result = $dbconn->qry($query);
 		$rownum = mysql_num_rows($result);
@@ -170,7 +170,7 @@
 	/* returns the ID of the next seminar to be held*/
 	function getNextStageID($dbconn)
 	{
-		$query = "SELECT id FROM seminar WHERE startdate >= DATE(NOW()) order by startdate asc LIMIT 1;";
+		$query = "SELECT id FROM seminar WHERE enddate >= DATE(NOW()) order by startdate asc LIMIT 1;";
 		$dbconn->dbconnect();
 		$result = $dbconn->qry($query);
 		$rownum = mysql_num_rows($result);
@@ -883,7 +883,6 @@
 	  /* full list of seminars */
 	function generateListMonthSeminars($db, $num, $year, $semid, $nextUID){
 		$s = new seminar();
-		$util = new utils();
 		$today = date("Y-m-d");
 		$thismonth = date("m");
 	    $firstdaymonth = $year . "-" . sprintf("%02d", $num) . "-01";
@@ -894,6 +893,7 @@
 			echo getMonthNameFromNumber($num) . "&nbsp;<i class='small fa fa-thumb-tack'></i>";
 		else
 			echo getMonthNameFromNumber($num); */
+		$util = new utils();
 		echo  $util->getMonthNameFromNumber($num) . "</div>";
 		for($isem = 0; $isem < $nsem; $isem++){
 			$SemID = $semid[$isem]["id"];

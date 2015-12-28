@@ -91,6 +91,25 @@
 			return $out;
 		}
 
+	function getThisMonthSchedule(){
+		$today = strtotime(Date('Y-m-d'));
+		$thimonth = date('m', $today);
+		if($thimonth >= 7 && $thimonth <= 9)	/* september */
+			$sched = $thimonth;
+		else
+			$sched = "10";
+		return $sched;
+	}
+
+	function existsInArray($arr, $value)
+	{
+		$n = count($arr);
+		for($i = 0; $i < $n; $i++)
+			if($arr[$i] == $value)
+				return 1;
+		return 0;
+	}
+
 		/* returns the data of the next seminar to be held*/
 		function getNextStageMMDD($dbconn)
 		{

@@ -236,7 +236,7 @@
 		$result = $dbconn->qry($query);
 
 		/* update instructors by deleteing them first */
-		$query = "DELETE FROM seminarinstructor WHERE stagefk = " . $this->id . ";";
+		$query = "DELETE FROM seminarinstructor WHERE seminarfk = " . $this->id . ";";
 		$resultinst = $dbconn->qry($query);
 
 		$inum = count($this->instructors);
@@ -256,7 +256,7 @@
 		$result = $dbconn->qry($query);
 
 		/* instructors */
-		$query = "DELETE FROM seminarinstructor WHERE stagefk = " . $this->id . ";";
+		$query = "DELETE FROM seminarinstructor WHERE seminarfk = " . $this->id . ";";
 		$resultinst = $dbconn->qry($query);
 
 		return $result;
@@ -458,7 +458,7 @@
 	/* retrieves the instructors for a given stage by ID */
 	function getStageInstructors($dbconn, $sid)
 	{
-		$query = "SELECT i.* from instructor i INNER JOIN seminarinstructor si ON i.id=si.instructorfk WHERE si.stagefk = " . $sid . " ORDER BY sorting;";
+		$query = "SELECT i.* from instructor i INNER JOIN seminarinstructor si ON i.id=si.instructorfk WHERE si.seminarfk = " . $sid . " ORDER BY sorting;";
 		$dbconn->dbconnect();
 		$result = $dbconn->qry($query);
 		$rownum = mysql_num_rows($result);

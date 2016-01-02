@@ -40,6 +40,7 @@
   	var $expires;
   	var $notes;
   	var $schedule;
+  	var $fees;
 
   	/* retrieves the info of a seminar */
   	function get($dbconn, $sid){
@@ -106,6 +107,7 @@
 		$this->tags = $sem[0]['tags'];
 		$this->notes = $sem[0]['notes'];
 		$this->schedule = $sem[0]['schedule'];
+  		$this->fees = $sem[0]['fees'];
 
 		$this->instructors = $this->getStageInstructors($dbconn, $this->id);
 		$ninst = count($this->instructors);
@@ -200,12 +202,14 @@
 	/* adds a new seminar */
 	function add($dbconn){
 
-		$query = "INSERT INTO seminar (startdate, enddate, starttime, endtime, month, year, description, shortdescription, ";
-		$query = $query . "locationfk, location, address, city, shortcity, schedule, tags, typefk, organizerfk, ";
+		$query = "INSERT INTO seminar (startdate, enddate, starttime, endtime, month, year, shortdescription, description, ";
+		$query = $query . "locationfk, location, address, city, shortcity, schedule, fees, tags, typefk, organizerfk, ";
 		$query = $query . "organizer, email, phone, url, link, ics, gcal, notes, pdf, image, photo, expires) ";
-		$query = $query . " values ('$this->fromdate','$this->todate','$this->fromtime','$this->totime',MONTH('$this->fromdate'),YEAR('$this->todate'), '$this->description', '$this->title', ";
-		$query = $query . " $this->locationfk, '$this->location', '$this->address', '$this->city', '$this->shortcity', '$this->schedule', '$this->tags', $this->seminartype, $this->organizerfk, ";
+		$query = $query . " values ('$this->fromdate','$this->todate','$this->fromtime','$this->totime',MONTH('$this->fromdate'),YEAR('$this->todate'), '$this->title', '$this->description', ";
+		$query = $query . " $this->locationfk, '$this->location', '$this->address', '$this->city', '$this->shortcity', '$this->schedule', '$this->fees', '$this->tags', $this->seminartype, $this->organizerfk, ";
 		$query = $query . " '$this->organizer', '$this->email', '$this->phone', '$this->url', '$this->pagelink', '$this->ics', '$this->gcal', '$this->notes', '$this->pdf', '$this->image', '$this->photo', '$this->expires');";
+
+		//echo $query;
 
 		$result = $dbconn->qry($query);
 		$newID = mysql_insert_id(); 
@@ -214,10 +218,10 @@
 		$inum = count($this->instructors);
 		for($i = 0; $i < $inum; $i++){
 			$query = "INSERT INTO seminarinstructor VALUES (" . $newID ."," . $this->instructors[$i]['id'] . "," . ($i+1) . ");";
+			//echo $query;
 			if(strpos($query,"NULL") == FALSE)
 				$result = $dbconn->qry($query);
 		}
-
 		return $newID;
 	}
 
@@ -229,7 +233,7 @@
 		$query = $query . " startime='$this->fromtime',endtime='$this->totime', ";
 		$query = $query . "year=YEAR('$this->todate'), description='$this->description', shortdescription='$this->title', ";
 		$query = $query . "locationfk=$this->locationfk, location='$this->location', address='$this->address', city='$this->city', shortcity='$this->shortcity',";
-		$query = $query . " schedule='$this->schedule', tags='$this->tags', typefk=$this->seminartype, organizerfk=$this->organizerfk, ";
+		$query = $query . " schedule='$this->schedule', fees='$this->fees', tags='$this->tags', typefk=$this->seminartype, organizerfk=$this->organizerfk, ";
 		$query = $query . "organizer='$this->organizer', email='$this->email', phone='$this->phone', url='$this->url', pdf='$this->pdf', link='$this->pagelink', ics='$this->ics', gcal='$this->gcal', notes='$this->notes', image='$this->image', photo='$this->photo', expires='$this->expires'";
 		$query = $query . " WHERE id = $this->id;";
 
@@ -286,15 +290,22 @@
 		return $data;
 	}
 
-
-
-
-
-  	function rawlist($dbconn, $activeonly){
-  		if($activeonly)
-			$query = "SELECT * from seminar where DATE(expires) > DATE(NOW()) OR expires='0000-00-00' order by date asc;";
-  		else
-			$query = "SELECT * from seminar order by date desc;";
+  	function rawlist($dbconn, $activeonly, $thisyearonly){
+  		if($thisyearonly){
+			$today = Date('Y-m-d');
+			if(date('m', strtotime($today)) >= 9)
+				$year = date('Y', strtotime($today));
+			else
+				$year = date('Y', strtotime($today)) - 1;
+			$from = $year . "-09-01";
+  		}
+  		if($activeonly && $thisyearonly)			
+			$query = "SELECT * from seminar where DATE(startdate) >= '" . $from . "' AND (DATE(expires) > DATE(NOW()) OR expires='0000-00-00') order by startdate ASC;";
+  		else if ($thisyearonly)
+			$query = "SELECT * FROM seminar WHERE DATE(startdate) >= '" . $from . "' ORDER BY startdate DESC;";
+		else
+			$query = "SELECT * FROM seminar ORDER BY startdate DESC;";
+		
 		$dbconn->dbconnect();
         $result = $dbconn->qry($query);
   		return $result;
@@ -496,6 +507,30 @@
 		return $data;
 	}
 
+	/* builds a list of options for the dropdown of the selection for the instructors */
+	function getStageInstructorsOptions($dbconn,$iid=NULL)
+	{
+		$query = "SELECT * from instructor ORDER BY sorting, rank DESC;";
+		$dbconn->dbconnect();
+		$result = $dbconn->qry($query);
+		$rownum = mysql_num_rows($result);
+		if($rownum >= 1){
+	        $data = "";
+	        while($row = mysql_fetch_assoc($result)){
+    	        $data = $data . "<option ";
+    	        if($iid != NULL && $iid == $row['id'])
+    	        	$data = $data . " selected ";
+	    	    $data = $data . " value='" . $row['id'] . "'>" . $row['lastname'] . "</option>";
+	        }
+
+	        $data = $data . "<option value='NULL'";
+	        if($iid == NULL || $iid == 0)
+	        	$data = $data . " selected ";
+	        $data = $data . ">&nbsp;</option>";
+    	    
+        }
+		return $data;
+	}
 
 	/* retrieves the type of a seminar */
 	function getStageType($dbconn, $sid)
@@ -537,7 +572,7 @@
 		$result = $dbconn->qry($query);
 		$rownum = mysql_num_rows($result);
 		if($rownum >= 1){
-	        $data = "<select class='seminardd' name='seminartype'>";
+	       $data = "<select class='seminardd' name='seminartype'>";
 	        while($row = mysql_fetch_assoc($result))
 	        	if(($row['description'] == "ordinario" && $tid == NULL) || ($tid == $row['id']))
 	    	        $data = $data . "<option selected value='" . $row['id'] . "'>" . $row['description'] . "</option>";
@@ -548,7 +583,32 @@
 	        if($tid == NULL || $tid == 0)
 	        	$data = $data . " selected ";
 	        $data = $data . " value='NULL'>&nbsp;</option>";
-    	    $data = $data . "</select>";
+	    	$data = $data . "</select>";
+        }
+		return $data;
+	}
+
+	/* builds a list of options for the instructors */
+	function getTypeOptions($dbconn,$tid = NULL)
+	{
+		$query = "SELECT * from seminartype ORDER BY description;";
+		$dbconn->dbconnect();
+		$result = $dbconn->qry($query);
+		$rownum = mysql_num_rows($result);
+		$sel = false;
+		if($rownum >= 1){
+ 	        $data = "";
+	        while($row = mysql_fetch_assoc($result))
+	        	if(($row['description'] == "ordinario" && $tid === NULL) || ($tid == $row['id'])){
+	    	        $data = $data . "<option selected value='" . $row['id'] . "'>" . $row['description'] . "</option>";
+	    	        $sel = true;
+				} else
+	    	        $data = $data . "<option value='" . $row['id'] . "'>" . $row['description'] . "</option>";
+
+	        $data = $data . "<option ";
+	        if($sel == false && ($tid == NULL || $tid == 0))
+	        	$data = $data . " selected ";
+	        $data = $data . " value='NULL'>&nbsp;</option>";
         }
 		return $data;
 	}
@@ -615,6 +675,36 @@
 		return $data;
 	}
 
+	/* builds a list of options for a dropdown for the selection of the location */
+	function getLocationOptions($dbconn, $lid = NULL)
+	{
+		$query = "SELECT * from location ORDER BY sorting;";
+		$dbconn->dbconnect();
+		$result = $dbconn->qry($query);
+		$rownum = mysql_num_rows($result);
+		$isFirst = true;
+		if($rownum >= 1){	/* seminar type */
+	        $data = "";
+	        while($row = mysql_fetch_assoc($result)){
+				$data = $data . "<option city='" . $row['city'] ."' address='" . $row['address'] ."' value='" . $row['id'] . "'";
+				if($lid != NULL){
+					if($lid == $row['id'])
+						$data = $data . " selected ";
+				} else {
+					if($isFirst){
+						$data = $data . " selected ";
+						$isFirst = false;
+					}
+				}
+				$data = $data . ">" . $row['name'] . "</option>";
+	        }
+
+	        $data = $data . "<option value='NULL'>_inserisci_a_mano_</option>";
+        }
+
+		return $data;
+	}
+
   	function getStageLocation($dbconn, $sid)
 	{
 		$query = "SELECT l.* from location l INNER JOIN seminar s  ON l.id = s.locationfk WHERE s.id= " . $sid .";";
@@ -662,6 +752,47 @@
 		return $data;
 	}
 
+	/* builds a dropdown for the selection of the organizer */
+	function getOrganizerOptions($dbconn, $oid = NULL)
+	{
+		$query = "SELECT * from location WHERE organizer = 1 ORDER BY sorting;";
+		$dbconn->dbconnect();
+		$result = $dbconn->qry($query);
+		$rownum = mysql_num_rows($result);
+		$isFirst = true;
+		if($rownum >= 1){	/* seminar type */
+	        $data = "";
+	        while($row = mysql_fetch_assoc($result)){
+				$data = $data . "<option ";
+				if($oid != NULL){
+					if($oid == $row['id'])
+						$data = $data . " selected ";
+				} else {
+					if($isFirst){
+						$data = $data . " selected ";
+						$isFirst = false;
+					}
+				}
+
+				$data = $data . "optphone='" . $row['phone'] ."' optemail='" . $row['email'] ."' opturl='" . $row['website']  ."' value='" . $row['id'] . "'>" . $row['name'] . "</option>";
+	        }
+	        $data = $data . "<option value='NULL'>_inserisci_a_mano_</option>";
+        }
+
+		return $data;
+	}
+	
+	
+	/* creates a preview of what will be shown in the list of seminars page */
+	function getPreview($dbconn){
+		$html = "";
+		
+		
+		
+		return $html;
+	}
+	
+	
 	/* creates the google calendar link */
 	function setGCal(){
 		$link = "http://www.google.com/calendar/event?action=TEMPLATE";
@@ -700,8 +831,8 @@
 
 	    $output = $output . "END:VEVENT\n";
 	    $output = $output . "END:VCALENDAR\n";
-	 	header('Content-type: text/calendar');
-		header('Content-Disposition: attachment; filename="' . $icsFileName . '"');
+//	 	header('Content-type: text/calendar');
+//		header('Content-Disposition: attachment; filename="' . $icsFileName . '"');
 		echo $output;
 	}
 
@@ -783,20 +914,21 @@
 
 	}
 
+	/*
 	function nextStage($dbconn)
 	{
 		$query = "SELECT * from seminar WHERE startdate >= DATE(NOW()) order by startdate asc LIMIT 1;";
 		$dbconn->dbconnect();
 		$result = $dbconn->qry($query);
 		$rownum = mysql_num_rows($result);
-		if($rownum > 0){	/* next upcoming stage */
+		if($rownum > 0){	 
 			$row = mysql_fetch_array($result);
 			$next = strtotime($row["startdate"]);
 			return $next;
         }
 		return null;
 	}
-
+	*/
 
 
 	function monthNextStage($dbconn)
@@ -961,6 +1093,59 @@
 			echo "</div><!--seminarlist__event-->";
 		}
 		echo "</div><!--seminarlist__month-->";
+	}
+
+	/* generates one seminar element for the seminars' list page */
+	function generateSeminarPost($db, $SemID = NULL, $s = NULL){
+		if($SemID != NULL){ /* load seminar info from DB */
+			$s = new seminar();
+			$seminario = $s->get($db,$SemID);
+		} else /* seminar info passed with $s */
+			$seminario = $s;
+		$util = new utils();
+		$from = $util->medDate($seminario->fromdate);
+		$fromMob = $util->medDate($seminario->fromdate);
+		$to = $util->medDate($seminario->todate);
+		$toMob = $util->medDate($seminario->todate);
+		$semUID = sprintf(str_replace("-", "", $seminario->fromdate),4,4);
+		$html = "<a id='" . $semUID . "'></a>";
+		$html = $html . "<div class='seminarlist__event";
+	    if(strtotime($seminario->todate) < strtotime($today))
+			$html = $html . "_past";
+		$html = $html . "'></i><span class='fa-stack-1x calendar-text top10'>";
+  		$days2add = 0;
+  		while(strtotime($seminario->fromdate) + $days2add*(24 * 60 * 60 * 1000) < strtotime($firstdaymonth))
+    		$days2add++;
+  		if($days2add == 0)
+    		$html = $html . date("d", strtotime($seminario->fromdate));
+  		else
+    		$html = $html . date("d", strtotime($firstdaymonth));
+
+		$html = $html . "</span></span></div>";
+		$html = $html . "</div><!--seminarlist__datebox-->";
+		$html = $html . "<div class='seminarlist__description'>";
+		$html = $html . "  <div class='seminarlist__type'>Seminario " . $seminario->seminartype  ."</div>";
+		$html = $html . "  <div class='seminarlist__title'>" . $seminars[$isem]["shortdescription"];
+		if (strpos($seminario->title,"Maestro") == FALSE && strpos($seminario->title,"M&deg;") == FALSE && strpos($seminario->title,"M°") == FALSE ){
+			$html = $html . $seminario->title . '<br/>' . $seminario->instructorlabel;
+		} else {
+			$html = $html . $seminario->title ;
+		}
+		$html = $html . "  </div>";
+		$html = $html . "  <div class='seminarlist__meta'><i class='fa fa-calendar fa-fw'></i>&nbsp;<em>da</em> " .   $from . " <em>a</em> " . $to . "</div>";
+		$html = $html . "  <div class='seminarlist__meta'><i class='fa fa-map-o fa-fw'></i>&nbsp;<span class='sc'>" . $seminario->shortcity . "</span>&nbsp;&#9671;&nbsp;" . str_replace("<br/>", " ", $seminario->location) . "</div>";
+		$html = $html . "  <div class='seminarlist__meta'><a class='noborder' href='/_seminar.php?sid=$SemID'> leggi tutti i dettagli <i class='fa fa-angle-double-right'></i></a></div>";
+		if($seminario->pdf != NULL)
+			$html = $html . "<a class='noborder disable' title='scarica la locandina' href='/stages/$seminario->pdf'><i class='fa fa-file-pdf-o fa-fw'></i>locandina</a>";
+		else
+			$html = $html . "<i class='fa fa-file-pdf-o fa-fw'></i>disponibile prossimamente</a>";
+		$html = $html . "</div>";
+		$html = $html . "</div><!--seminarlist__description-->";
+	    if($seminario->photo != NULL)
+    		$html = $html . "<div class='seminarlist__photobox'><img src='./stages/$seminario->photo' class='seminarlist__photo' /></div>";
+		$html = $html . "</div><!--seminarlist__event-->";		
+		
+		return $html;
 	}
 
 

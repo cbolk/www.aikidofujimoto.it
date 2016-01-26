@@ -57,7 +57,7 @@
     <!-- Custom styles for this template -->
     <link href="../css/dashboard.css" rel="stylesheet">
     <link href="../css/dashboardAF.css" rel="stylesheet">
-		<link rel="stylesheet" href="../css/stats.css" /> 
+		<link rel="stylesheet" href="../css/admcalendar.css" /> 
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -89,9 +89,23 @@
 			<?php 
 				$ai = new aikidoka();
 				$person = $ai->fullname($dbconn, $aid);
+				$isBeg = $ai->isBeginner($dbconn, $aid);
+				$aiid = $aid;
 				echo  $person[0]['fullname'] ;
 			?>
+		  <div class='actions aright'>
+		  	<a href='./adm_attendance_month.php' alt="elenco presenze"><i class="fa fa-bars"></i> elenco</a>&nbsp;
+		  <?php
+				if($y != "") {
+					echo "<a href='./adm_attendance_yearly.php?aid=" . $aiid. "' alt='elenco presenze'><i class='fa fa-bar-chart fa-fw'></i> da esame</a>";
+				} else {
+					echo "<a href='./adm_attendance_yearly.php?aid=" . $aiid . "&y=" . $year . "' alt='elenco presenze'><i class='fa fa-bar-chart fa-fw'></i> anno</a>";
+				}
+		  ?>
+		  	
+		  </div>
           </h1>
+		  <div class='clearfix'></div>
           <div class="row">
 	        <center>			
 			<h3><?php
@@ -136,7 +150,7 @@
 				$headstr = "";
 				$i = 9;
 			    $yhrs = 0;
-			    if($firstmonth != 9){
+			    if($firstmonth != 9  && $isBeg == 0){
 					echo "\n<div class='calendar_row'>\n<div class='calendar__year_label'>" . $startyear;
 					$toyear = intval($startyear) +1 ;
 					echo "-" . $toyear . "</div>\n";

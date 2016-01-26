@@ -155,7 +155,6 @@
 					else
 						$y = date('Y', $lastdateofmonth);
 					echo "<td class='tableicon cntr'><a href='./adm_aikidoka_view.php?aid=" . $row['id'] . "'><i class='fa fa-user fa-fw'></i></a></td>";
-//					echo "<td class='tableicon cntr'><a href='./usr_attendance_monthly.php?aid=" . $row['id'] . "&day=" . date('Y-m-t',$currday) . "'><i class='fa fa-calendar fa-fw'></i></a></td>";
 					echo "<td class='tableicon cntr'><a href='./adm_attendance_yearly.php?aid=" . $row['id'] . "&y=" . $y . "'><i class='fa fa-area-chart fa-fw'></i></a></td>";
 					echo "<td class='tableicon cntr'><a href='./adm_attendance_yearly.php?aid=" . $row['id'] . "'><i class='fa fa-bar-chart fa-fw'></i></a></td>";
 					echo "</tr>";

@@ -52,10 +52,10 @@
 
   		$this->fromdate = $sem[0]['startdate'];
   		$this->shortdate = date("Ymd", strtotime($this->fromdate));
-  		$this->fromtime = $sem[0]['starthour'];
+  		$this->fromtime = $sem[0]['starttime'];
   		$this->dtstart = date("Ymd", strtotime($this->fromdate)) . "T" . str_replace(":", "", $this->fromtime) . "Z";
   		$this->todate = $sem[0]['enddate'];
-  		$this->totime = $sem[0]['endhour'];
+  		$this->totime = $sem[0]['endtime'];
   		$this->dtend = date("Ymd", strtotime($this->todate)) . "T" . str_replace(":", "", $this->totime) . "Z";
   		$this->description = $sem[0]['description'];
   		$this->title = $sem[0]['shortdescription'];
@@ -225,18 +225,19 @@
 		return $newID;
 	}
 
-	/* adds a new seminar */
+	/* updates the info of a seminar */
 	function update($dbconn){
-		$this->setGCal();
+		//$this->setGCal();
 
 		$query = "UPDATE seminar SET startdate='$this->fromdate', enddate='$this->todate', month=MONTH('$this->fromdate'), ";
-		$query = $query . " startime='$this->fromtime',endtime='$this->totime', ";
+		$query = $query . " starttime='$this->fromtime',endtime='$this->totime', ";
 		$query = $query . "year=YEAR('$this->todate'), description='$this->description', shortdescription='$this->title', ";
 		$query = $query . "locationfk=$this->locationfk, location='$this->location', address='$this->address', city='$this->city', shortcity='$this->shortcity',";
 		$query = $query . " schedule='$this->schedule', fees='$this->fees', tags='$this->tags', typefk=$this->seminartype, organizerfk=$this->organizerfk, ";
 		$query = $query . "organizer='$this->organizer', email='$this->email', phone='$this->phone', url='$this->url', pdf='$this->pdf', link='$this->pagelink', ics='$this->ics', gcal='$this->gcal', notes='$this->notes', image='$this->image', photo='$this->photo', expires='$this->expires'";
-		$query = $query . " WHERE id = $this->id;";
+		$query = $query . " WHERE id = " . $this->id . ";";
 
+		//echo $query;
 		$result = $dbconn->qry($query);
 
 		/* update instructors by deleteing them first */
@@ -245,20 +246,20 @@
 
 		$inum = count($this->instructors);
 		for($i = 0; $i < $inum; $i++){
-			$query = "INSERT INTO seminarinstructor VALUES (" . $newID ."," . $this->instructors[$i]['id'] . "," . ($i+1) . ");";
-			if(strpos($query,"NULL") == FALSE)
+			$query = "INSERT INTO seminarinstructor VALUES (" . $this->id ."," . $this->instructors[$i]['id'] . "," . ($i+1) . ");";
+			if(strpos($query,"NULL")  === false)
 				$result = $dbconn->qry($query);
 		}
 
-		return $query;
+		return $this->id;
 	}
 
-	/* delete a new seminar */
+	/* deletes a seminar */
 	function del($dbconn){
 
 		$query = "DELETE FROM seminar WHERE id = " . $this->id . ";";
 		$result = $dbconn->qry($query);
-
+		
 		/* instructors */
 		$query = "DELETE FROM seminarinstructor WHERE seminarfk = " . $this->id . ";";
 		$resultinst = $dbconn->qry($query);
@@ -310,6 +311,28 @@
         $result = $dbconn->qry($query);
   		return $result;
   	}
+
+	/* returns the number of active seminars */
+	function numActiveSeminars($dbconn)
+	{
+		$query = "SELECT COUNT(*) FROM seminar WHERE DATE(enddate) > DATE(NOW());";
+		$dbconn->dbconnect();
+        $result = $dbconn->qry($query);
+        $row = mysql_fetch_array($result);
+        return $row[0];
+        
+	}
+
+	/* returns the number of semianrs */
+	function numSeminars($dbconn)
+	{
+		$query = "SELECT COUNT(*) FROM seminar;";
+		$dbconn->dbconnect();
+        $result = $dbconn->qry($query);
+        $row = mysql_fetch_array($result);
+        return $row[0];
+        
+	}
 
   	/* retrieves the list of seminars, eventually those that are active and/or upcoming only */
   	function getList($dbconn, $activeonly, $upcoming){

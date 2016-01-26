@@ -1,0 +1,185 @@
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css);
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,600,200italic,300italic,400italic,600italic');
+
+body,html {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #555;
+    font-size: 16px;
+    line-height: 27.2px;
+    font-weight: 300;
+}
+
+.site_wrapper{min-height:100%}
+@media (min-width:768px){.site_wrapper{position: absolute; left: 50%; width: 900px; margin-left: -460px; padding: 5px 10px 10px;}}
+@media (max-width:960px){.site_wrapper{width: 100%;padding-top:3px;margin-bottom: 35px}}
+.site_container{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;background-color:white; border-top: 1px solid #CCC;padding-top:10px;}}
+@media (min-width:768px){.site_container{margin: 0 auto}}
+
+.sidebar {width: 100%;}
+.sidebar {box-sizing: border-box;height: 100%;}
+.sidebar__name {color:#fff;background-color: #282658;text-align: center;padding-left: 0px;}
+.sidebar__name {font-size: 1.48em;font-weight: 300;line-height: 1.5em;}
+.sidebar__link_list {margin: 0.5em;padding-left: 0px;text-align: center;}
+.sidebar__link_list {box-sizing: border-box;list-style-type: none;}
+.sidebar__link_item {display: inline-block;width: 60px;}
+.sidebar__link_item {color: #5B63D6;padding-bottom: 0.45em;padding-top: 0.45em;}
+
+.actions{font-size: 24px; padding-right: 3px}
+
+h1, h2, h3 {text-align: center; font-weight: 600; color: #282658; margin: 0;}
+h1 {font-size: 28px;}
+
+/* dettagli della pagina */
+.details {font-size: 18px;}
+option {font-size: 17px; font-family: 'Source Sans Pro', sans-serif;}
+
+
+ul.meta {
+    display: table;
+    margin-bottom: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: auto;
+    margin-left: 10px;
+}
+ul.meta li {
+    display: table-row;
+    margin: 0px 0px 0px 25px;
+    padding: 0px;
+}
+ul.meta li > label {
+    display: table-cell;
+    font-size: 15px;
+    font-weight: 400;
+    padding-right: 10px;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+.label {
+    font-size: 15px;
+    font-weight: 400;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+ul.meta li > span {
+    display: table-cell;
+    padding-right: 6px;
+}
+ul.meta li > span.explanation {
+    color: #666;
+    display: table-cell;
+    padding-right: 6px;
+    font-size: 14px;
+}
+.meta {
+    margin-left: 30px;
+}
+ul, ol {
+    line-height: 1.5;
+}
+ol, ul {
+    list-style-type: none;
+    margin: 1em 0px;
+    padding: 0px;
+}
+
+
+.admin_table{text-align: center; width:100%;padding-top: 10px;}
+
+.form_area{
+	margin: 0px 3px 3px;
+	padding: 0.4em 0.4em 0.4em 1.5em;
+	font-size: 1.7em;
+}
+
+table.admin__table {border: 1px solid #E6E6E6;margin: 0 auto;}
+table.admin__table th {font-size: 1.3em;color:#fff;background-color: #282658;padding-left: 15px;padding-right: 15px;}
+table.admin__table td {font-size: 1.2em;}
+table.admin__table tr {border-bottom: 1px solid #E6E6E6;}
+
+.todd {background-color: #AFC2E1}
+.texpired {background-color: #E1E1E1}
+
+.ui-state-default{
+    border: 1px solid #D3D3D3;
+    background-color: #E6E6E6;
+    font-weight: normal;
+    color: #555;
+}
+
+
+a {text-decoration: none; color:#000;}
+
+.sel{background-color: #A8B6D6}
+
+.acenter, td.center {text-align:center;}
+.aleft, td.left {text-align: left;}
+.fright {float: right;}
+.fleft{float: left;}
+
+.newinstructor{text-align: center;}
+
+.btn{padding: 5px;}
+.clear{clear: both;color: blue;}
+.aright{text-align: right}
+
+/* seminars */
+.buttons{margin: 10px;}
+input[type=submit] {padding:5px 15px; background:#282658; color: #fff; font-size: 15px; border:0 none;
+cursor:pointer;
+-webkit-border-radius: 5px;
+border-radius: 5px; }
+input[type=radio].css-checkbox {
+    height:14px; width:14px; margin:1px; padding:0; 
+}
+/* class schedule */
+.weekdaytitle {width: 140px;display:inline-block;padding-top:5px;padding-bottom:5px;background-color:#5B63D6 }
+.hour{width: 138px;display:inline-block;background:#eee;border: 1px solid #000;font-size: 0.8em;text-align:left;padding-left:1px;}
+.empty{border: 1px solid #fff;background-color: #fff}
+.fullrow, .times{width: 100%, display: block}
+.time{display: inline-block;}
+
+.toggle{display:none;}
+.show{display: block;}
+
+
+/* seminar list */
+.seminarlist{display: table;}
+.seminarrow{display: table-row;}
+.seminarrow1{display: table-row;background-color: #eee}
+.semdate{width: 30px; display: block; text-align: center; line-height: 18px; font-size: 15px;}
+.seminarinfo{display: table-cell;padding-right: 7px;font-size: 16px;}
+.bbottom{font-weight: 400; border: 1px solid #fff;}
+
+/* forms */
+#seminardetail input{width: 250px;}
+.seminardd {   
+   width: 250px;
+   height: 28px;
+    line-height:28px;
+   overflow: hidden;    
+}
+
+.ui-datepicker {
+    background-color: #fff;
+    border: 1px solid #282658;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+   font-size: 16px;
+     border-radius: 4px;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    width: 240px;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    margin-bottom: 1px;
+    text-align: center;
+    background-color: #282658;
+    border: 0;
+}
+
+* {
+    box-sizing: border-box;
+}

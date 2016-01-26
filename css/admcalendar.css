@@ -1,0 +1,197 @@
+.calendar {
+  margin: auto;
+  padding-bottom: 15px; }
+
+.calendar__weekday {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  display: table-cell;
+  background-color: #ffffff;
+  margin-right: 2px;
+  font-variant: small-caps;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-align: center;
+  font-size: .7em;
+  line-height: 2em; }
+
+.calendar__monthname {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  display: table-cell;
+  background-color: #ffffff;
+  margin-right: 2px;
+  font-variant: small-caps;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-align: center;
+  font-size: .9em;
+  line-height: 2em; }
+
+.calendar__month_tot {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 45px;
+  height: 30px;
+  display: table-cell;
+  background-color: #ffffff;
+  margin-right: 2px;
+  font-variant: small-caps;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-align: center;
+  font-size: .9em;
+  line-height: 2em; }
+
+@media (max-width: 960px) {
+  .calendar__month_tot {
+    font-weight: 300;
+    font-size: .8em; } }
+.calendar__year_label {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 90px;
+  height: 30px;
+  display: table-cell;
+  background-color: #ffffff;
+  margin-right: 2px;
+  font-variant: small-caps;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-align: center;
+  font-size: .9em;
+  line-height: 2em; }
+
+@media (max-width: 960px) {
+  .calendar__year_label {
+    font-weight: 300;
+    font-size: .8em; } }
+.calendar__day {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  display: table-cell;
+  background-color: #ecf0f1;
+  margin-right: 2px;
+  font-variant: small-caps;
+  font-weight: 300;
+  text-transform: lowercase;
+  text-align: center;
+  font-size: .7em;
+  line-height: 2em; }
+
+.calendar__day_not_working {
+  background-color: #b1c2c6; }
+
+.calendar__day_nobackground {
+  background-color: #ffffff;
+  color: #000; }
+
+.calendar__day_not_in_month {
+  opacity: 0; }
+
+.calendar_keikkko_hours {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 30px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 2px;
+  font-variant: small-caps;
+  font-weight: 300;
+  text-transform: lowercase;
+  text-align: center;
+  font-size: .7em; }
+
+.calendar_keiko_hours {
+  margin-right: 2px;
+  margin-bottom: 8px;
+  display: inline-block;
+  width: 30px;
+  font-variant: small-caps;
+  font-weight: 300;
+  font-size: .6em;
+  text-transform: lowercase; }
+
+.calendar_row {
+  display: table-row; }
+
+.keiko_1 {
+  background-color: #00FF66; }
+
+.keiko_2 {
+  background-color: #00CC66; }
+
+.keiko_3 {
+  background-color: #009966; }
+
+.keiko_4 {
+  background-color: #006666; }
+
+.keiko_5 {
+  background-color: #003366;
+  color: #fff; }
+
+.date__lastexam {
+  background-color: #00FF66; }
+
+.calendar__legend {
+  font-variant: small-caps;
+  font-weight: 400;
+  font-size: .7em;
+  float: left; }
+
+.calendar__month {
+  width: 224px;
+  vertical-align: top;
+  margin-top: 10px;
+  padding: 15px; }
+
+@media (max-width: 960px) {
+  .calendar__month {
+    display: block; }
+
+  .seminar-list__title {
+    font: bold 18px/24px "Roboto Condensed",sans-serif;
+    text-align: center;
+    margin: 15px;
+    text-align: center; } }
+@media (min-width: 768px) {
+  .calendar__month {
+    display: inline-block; } }
+@media (max-width: 960px) {
+  .calendar__month {
+    margin: auto; } }
+@media (min-width: 768px) {
+  .calendar__month {
+    margin-left: 30px; } }
+.calendar__month_name {
+  font-variant: small-caps;
+  font-weight: 400;
+  text-transform: lowercase;
+  font-family: 'Roboto Condensed';
+  text-align: center; }
+
+.calendar__category_seminar {
+  color: #6B9ED8; }
+
+.calendar__category_seminar_past {
+  color: #45C545; }
+
+.calendar__category_seminar_keiko {
+  background-color: #6B9ED8; }
+
+.today {
+  border-bottom: 3px solid red;
+  margin-bottom: -3px; }

@@ -24,7 +24,7 @@
     </div><!-- sidebar -->
     <div class="site_container">
     <div class="generic-page">
-            <div class="generic__title">Links</div>
+            <div class="generic__title">Link</div>
 			<div>
 				<ul class='weblinks'>
 					<li><a href='http://www.aikikai.it' target=_blank title='Aikikai Italia'>www.aikikai.it</a></li>
@@ -32,8 +32,10 @@
 					<li><a href='http://www.aikidorenbukai.it' target=_blank title='Aikido Renbukai'>www.aikidorenbukai.it</a></li>
 					<li><a href='http://www.fujinami.it/' target=_blank title='Aikido Fujinami Bologna'>www.fujinami.it</a></li>
 				</ul>
-				<h2>&nbsp;</h2>
+				<h2>Foto</h2>
 				<ul class='weblinks'>
+          <li>foto del Seminario di Aikido per 5° e 6° Kyu: <a target=_blank href='https://www.facebook.com/media/set/?set=a.1697283107222153.1073741834.1670690169881447&type=3'>link</a></li>
+          <li>foto del Seminario di fine anno - 2015: <a target=_blank href='https://www.facebook.com/media/set/?set=a.1688545051429292.1073741832.1670690169881447&type=3'>link</a></li>
 					<li>album foto su <a href='http://www.flickr.com/aikikaimilano/' target=_blank title='Flickr'>Flickr</a>&nbsp;<i class="fa fa-flickr"></i></li>
 				</ul>
         <h2>&nbsp;</h2>

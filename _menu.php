@@ -77,7 +77,7 @@
 				<li onclick="location.href=&apos;./_links.php&apos;" style="cursor: pointer" class="sidebar__link_item fright"><div class="sidebar__link_item__name"><i alt='links' title="links" class="fa fa-link"></i></div></li>
 				</div>
 			</ul>
-			<div id="secondarymenu" class="sidebar__link_list">
+			<div id="secondarymenu" class="sidebar__link_list nomobile">
 				<ul class="<?php echo $isfuji; ?>">
 					<li onclick="location.href=&apos;./_fujimoto.php&apos;" style="cursor: pointer" class="sidebar__link_item"><div class="sidebar__link_item__name">Il Maestro</div></li>
 					<li onclick="location.href=&apos;./_scuola.php&apos;" style="cursor: pointer" class="sidebar__link_item"><div class="sidebar__link_item__name">La sua scuola</div></li>

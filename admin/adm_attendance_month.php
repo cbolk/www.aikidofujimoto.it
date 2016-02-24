@@ -3,14 +3,12 @@
 <html lang="it">
   <head>
 <?php  
-	setlocale(LC_TIME, 'ita');
+	setlocale(LC_TIME, 'it_IT');
 	date_default_timezone_set('Europe/Rome');
 	include("./class.login.php");
 	include("./class.db.php");
 	include("./class.aikidoka.php");
 	include("./class.utilities.php");
-	setlocale(LC_TIME, 'ita');
-	date_default_timezone_set('Europe/Rome');
 	$db = new dbaccess();
 
 	$log = new logmein();
@@ -110,17 +108,12 @@
   $people = $aiki->rawlist($db,true);
   $datahrs = $aiki->getTotHoursMonthAll($db,$lastdateofmonth);
 ?>
-          <h1 class="page-header">Presenze del mese di <?php echo date('F Y', $lastdateofmonth); ?>          
+          <h1 class="page-header">Presenze del mese di <?php echo $db->monthname($curmonth) . " " . date('Y', $lastdateofmonth); ?>          
           </h1>
 
           <div class="row">
-	        <center>
-            	<a class="back" href="adm_attendance_month.php?day=<?php echo $prevmonth; ?>"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
-				<?php 
-					echo date('F Y', $lastdateofmonth);
-				?>
-				<a class="forth" href="adm_attendance_month.php?day=<?php echo $nextmonth; ?>"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>           
-		 	</center> 
+          	<div class="pull-left"><a class="back" href="adm_attendance_month.php?day=<?php echo $prevmonth; ?>"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> <?php if($curmonth == 1) echo $db->monthname(12); else echo $db->monthname($curmonth - 1); ?></a></div>
+          	<div class="pull-right"><a class="forth" href="adm_attendance_month.php?day=<?php echo $nextmonth; ?>"><?php echo $db->monthname(($curmonth + 1) % 12); ?> <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></div>
          </div>
           <div class="table-responsive">
 			<table class="table table-striped" id="ajaxtable">
@@ -155,6 +148,7 @@
 					else
 						$y = date('Y', $lastdateofmonth);
 					echo "<td class='tableicon cntr'><a href='./adm_aikidoka_view.php?aid=" . $row['id'] . "'><i class='fa fa-user fa-fw'></i></a></td>";
+//					echo "<td class='tableicon cntr'><a href='./usr_attendance_monthly.php?aid=" . $row['id'] . "&day=" . date('Y-m-t',$currday) . "'><i class='fa fa-calendar fa-fw'></i></a></td>";
 					echo "<td class='tableicon cntr'><a href='./adm_attendance_yearly.php?aid=" . $row['id'] . "&y=" . $y . "'><i class='fa fa-area-chart fa-fw'></i></a></td>";
 					echo "<td class='tableicon cntr'><a href='./adm_attendance_yearly.php?aid=" . $row['id'] . "'><i class='fa fa-bar-chart fa-fw'></i></a></td>";
 					echo "</tr>";

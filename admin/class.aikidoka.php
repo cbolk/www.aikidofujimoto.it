@@ -109,15 +109,28 @@
 		return $result;
 	}
 
+	function updateField($dbconn, $fieldname, $value, $type)
+	{
+		$sql = "UPDATE aikidoka SET " .fieldname . " = ";
+		$sqlend = "where id= " . $this->id . ";";
+
+		$sql = $sql . sqlend;
+		$result = $dbconn->qry($sql);
+		return $result;
+	}	
+
 	/* updates the information of an aikidoka */
 	function updateMonthHours($dbconn,$day,$hours){
 		$query = "SELECT attendance.hours FROM attendance WHERE date = '" . $day . "' AND aikidoka_fk = " . $this->id;
 		$result = $dbconn->qry($query);
-		if(mysql_num_rows($result) == 0)
+		$numrows = mysql_num_rows($result);
+		//$tmp = $query . "(" . $numrows .")";
+		if($numrows == 0)
 			$query = "INSERT INTO attendance (date,hours,aikidoka_fk) VALUES (\"" . $day . "\"," . $hours . "," . $this->id . ");";
 		else 
 			$query = "UPDATE attendance SET hours = " . $hours . " WHERE date = \"" . $day . "\" AND aikidoka_fk = " . $this->id . ";";
-		$result = $dbconn->qry($query);			
+		$result = $dbconn->qry($query);	
+		//echo $tmp . " -- "	.$query;	
 		return $result;
 	}
 
@@ -144,6 +157,17 @@
   		return $result;
   	}
   	
+
+  	function getAllNames($dbconn, $activeonly){
+  		if($activeonly)			
+			$query = "SELECT id, lastname, firstname FROM aikidoka where active = 1 ORDER BY lastname, firstname ASC;";
+		else
+			$query = "SELECT id, lastname, firstname FROM aikidoka ORDER BY lastname, firstname ASC;";
+		
+		$dbconn->dbconnect();
+        $result = $dbconn->qry($query);
+  		return $result;
+  	}
   	
   	function fullname($dbconn, $aid){
 		$query = "SELECT firstname, lastname, concat(firstname, ' ', lastname) as fullname from aikidoka where id=" . $aid . ";";
@@ -157,6 +181,13 @@
     	}
     	return $data;
    		//return json_encode($data);     
+  	}
+
+  	function findFullname($names, $aid){
+  		$num = count($names);
+  		for($i = 0; $i < $num; $i++)
+  			if($names[$i]['id'] == $aid)
+  				return $names[$i]['lastname'] . " " . $names[$i]['firstname'];
   	}
 
   	function isBeginner($dbconn, $aid){
@@ -217,6 +248,24 @@
   		return $mhours;
   	}
 
+  	function getHoursYearAllAikidokas($dbconn, $fromyear, $toyear){
+		$query = "SELECT aikidoka_fk, YEAR( date ) AS YY, MONTH( date ) AS MM, SUM( hours ) AS MH FROM attendance where ";
+		$query = $query . " date > '" . $fromyear . "/08/31' AND date <= '" . $toyear . "/08/31'";
+		$query = $query . " GROUP BY aikidoka_fk, YEAR( date ) , MONTH( date )";
+		$dbconn->dbconnect();
+        $result = $dbconn->qry($query);
+
+        $names = $this->getAllNames($dbconn,true);
+
+        $num = mysql_num_rows($result);
+		for($i = 0; $i < $num; $i++){
+			$mhours[$i] = mysql_fetch_assoc($result);	
+			$mhours[$i]['fullname'] = $this->findFullname($names, $$mhours[$i]['aikidoka_fk']);
+		}
+
+  		return $mhours;
+  	}
+
   	function getHoursFromExam($dbconn, $aid){
   		$this->lastexam = $this->getDateLastexam($dbconn, $aid);
 		$query = "SELECT YEAR( date ) AS YY, MONTH( date ) AS MM, SUM( hours ) AS MH FROM attendance where aikidoka_fk=" . $aid;
@@ -273,15 +322,20 @@
 		echo  "</h3></div>\n";
 		$util = new utils();
 		echo "<div class='content'>";
-		echo "<div class='calendar_row calendar__weekdaynames'>\n<div class='calendar__day_not_in_month'>&nbsp;</div>\n";
+		echo "<div class='calendar_row calendar__weekdaynames'>\n";
+		echo "<div class='calendar__day_not_in_month'>&nbsp;</div>\n";
 		for($i = 0; $i < 7; $i++)
 			echo "<div class='calendar__weekday'>" . $util->dowInItalian(($i+1) % 7) . "</div>\n";
 		echo "</div><!-- row -->\n";
 		$strhours = "";
+		//if($dayofweek != 1){ /* if the month does not start exactly on Monday ..*/
 		echo "<div class='calendar_row'>\n<div class='calendar__day_not_in_month'>&nbsp;</div>\n";
 		for($i = 1, $j = ($dayofweek + 6) % 7; $j > 0; $j--, $i++){
 			echo "<div class='calendar__day calendar__day_not_in_month'>NA </div>\n";
 		}
+		//}
+		if($i == 1)
+			echo "</div>";
 		for($day = 1; $day <= $daysinmonth; $day++){
 			if($i == 1)
 				echo "\n<div class='calendar_row'>\n<div class='calendar__day_not_in_month'>&nbsp;</div>";

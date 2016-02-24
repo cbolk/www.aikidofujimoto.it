@@ -27,13 +27,19 @@
 		$ns->dtend = date("Ymd", strtotime($ns->todate)) . "T" . str_replace(":", "", $ns->totime) . "Z";
 	$ns->title = convertCRBR($_POST["shortdescription"]);		
 	$ns->description = convertCRBR($_POST["description"]);		
-	$ns->locationfk = $_POST["locationid"];
-	if($_POST["locationid"] === NULL || $_POST["locationid"] == ""){
+	if($_POST["locationid"] != NULL && $_POST["locationid"] != "NULL"){
+		$ns->locationfk = $_POST["locationid"];
+		$ns->location = NULL;
+		$ns->address = NULL;
+		$ns->city = NULL;
+		$ns->shortcity = NULL;						
+	} else {
+		$ns->locationfk = 0;
 		$ns->location = $_POST["location"];
 		$ns->shortcity = convertCRBR($_POST["shortcity"]);
 		$ns->address = convertCRBR($_POST["address"]);
 		$ns->city = convertCRBR($_POST["city"]);
-	} 
+	}
 	$ns->seminartype = $_POST["seminartype"];
 	if(!($_POST["seminarinstructor1"]===NULL || $_POST["seminarinstructor1"] == ""))
 		$ns->instructors[0]['id'] = $_POST["seminarinstructor1"];
@@ -42,12 +48,14 @@
 	if(!($_POST["seminarinstructor3"]===NULL || $_POST["seminarinstructor3"] == ""))
 		$ns->instructors[2]['id'] = $_POST["seminarinstructor3"];
 
-	$ns->organizerfk = $_POST["organizerfk"];
-	if($_POST["organizerfk"] === NULL || $_POST["organizerfk"] == ""){
+	if($_POST["organizerfk"] != NULL && $_POST["organizerfk"] != "NULL"){
+		$ns->organizerfk = $_POST["organizerfk"];
+	} else {
+		$ns->organizerfk = 0;
 		$ns->organizer = $_POST["organizer"];
 		$ns->phone = $_POST["phone"];
 		$ns->email = $_POST["email"];
-		$ns->url = $_POST["url"];
+		$ns->url = $_POST["url"];		
 	}
 	$ns->tags = $_POST["tags"];
 	$ns->pdf =	$_FILES['pdf']['name'];
@@ -60,15 +68,6 @@
 	else
 		$ns->expires = date('Y-m-d', strtotime('+1 year'));
 	//$ns->setGCal();
-
-	/**/
-	if($ns->locationfk){
-		$ns->location = NULL;
-		$ns->address = NULL;
-		$ns->city = NULL;
-		$ns->shortcity = NULL;						
-	}
-	
 	
 	$ris =  $ns->add($db);
 

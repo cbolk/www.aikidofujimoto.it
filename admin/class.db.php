@@ -2,11 +2,10 @@
 class dbaccess {
     //database setup
     //local
-    var $hostname_logon = '127.0.0.1'; 	//Database server LOCATION
-    var $database_logon = 'af';			//Database NAME
-    var $username_logon = 'root';		//Database USERNAME
-    var $password_logon = '';			//Database PASSWORD
-    var $dbconn;
+    var $hostname_logon = '127.0.0.1'; //Database server LOCATION
+    var $database_logon = 'af';       //Database NAME
+    var $username_logon = 'root';       //Database USERNAME
+    var $password_logon = '';       //Database PASSWORD
     	
     //connect to database
     function dbconnect(){
@@ -72,6 +71,16 @@ class dbaccess {
 		
 		$strdatedb = $dpart[2] . '-' . $dpart[1] . '-' . $dpart[0];
 		return $strdatedb;
+	}
+
+	function onoff_to_db($val){
+		if($val == '' || $val === null) return 0;
+		if($val == 'on' || $val == 'true') return 1; else return 0;
+	}
+
+	function db_to_onoff($val){
+		if($val == 1 || $val == '1' || $val == true) return 'checked';
+		return '';
 	}
 
     function close() {

@@ -84,17 +84,33 @@
 		    $("td[contenteditable=true]").blur(function(){
 		        var field_userid = $(this).attr("id") ;
 		        var value = $(this).text();
-		        $.post('adm_aikidoka_list_update.php' , field_userid + "=" + value, function(data){
-						
-		        });
+				$.ajax({
+					type: 'post',
+					url: 'adm_aikidoka_list_update.php',
+					data: field_userid + "=" + value,
+					beforeSend: function() {
+			            //alert("aggiorno");
+			          },
+					success: function(response) {
+						//alert(response);
+					}
+				});		        
 			});	
 			$(':checkbox').checkboxpicker();
 			$(':checkbox').checkboxpicker().change(function() {
 		        var field_userid = $(this).attr("id") ;
 		        var value = $(this).prop('checked');
-		        $.post('adm_aikidoka_list_update.php' , field_userid + "=" + value, function(data){
-						
-		        });
+				$.ajax({
+					type: 'post',
+					url: 'adm_aikidoka_list_update.php',
+					data: field_userid + "=" + value,
+					beforeSend: function() {
+			            //alert("aggiorno");
+			          },
+					success: function(response) {
+						//alert(response);
+					}
+				});		        
 			});
 		});
 		</script>

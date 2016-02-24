@@ -315,8 +315,12 @@
                 <?php
                     echo $sem->getStageInstructorsOptions($db,$s->instructors[2]['id']); 
                 ?>        
-                </select>
-               <span class="explanation">i nomi verranno visualizzati con l'ordine indicato</span></li>
+                </select>                
+                <br/>
+                <button type="button" class="btn btn-default"><a href="./adm_instructor_new.php">aggiungi persona</a></button>
+                <br/>
+               <span class="explanation">i nomi verranno visualizzati con l'ordine indicato</span>
+
                           </div>
                       </div> 
 
@@ -346,13 +350,13 @@
                         </div>
                     </div> 
 
-                    <div class="control-group col-xs-6  isHidden"  id="manuallocation">
+                    <div class="control-group col-xs-6 isHidden"  id="manuallocation">
                       <label>&nbsp;</label>
                         <div class="controls">
                           <input class="form-control" placeholder="luogo" name="location" id="location" type="text" maxlength="200"/>
-              <input class="form-control" placeholder="citt&agrave;" name="shortcity" id="shortcity" type="text" maxlength="200" />
-              <input class="form-control" placeholder="indirizzo" name="address" id="address" type="text" maxlength="200" />
-              <input class="form-control" placeholder="CAP citt&agrave; (provincia)" name="city" id="city" type="text" maxlength="200" /> 
+                          <input class="form-control" placeholder="citt&agrave;" name="shortcity" id="shortcity" type="text" maxlength="200" />
+                          <input class="form-control" placeholder="indirizzo" name="address" id="address" type="text" maxlength="200" />
+                          <input class="form-control" placeholder="CAP citt&agrave; (provincia)" name="city" id="city" type="text" maxlength="200" />
                         </div>
                     </div> 
 

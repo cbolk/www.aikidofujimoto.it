@@ -11,6 +11,6 @@
           </ul-->
           <ul class="nav nav-sidebar">
             <li><a href="./adm_aikidoka_list.php">Iscritti</a></li>
-            <li><a href="./adm_attendance_month.php">Presenze</a></li>
+            <li><a href="./adm_attendance_month.php">Presenze mensili</a></li>
           </ul>
         </div>
